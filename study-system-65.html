@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 65 - Pros and Cons of Online Learning</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Lato:wght@400;700;900&display=swap');
+  :root{--blue:#1a4fa0;--orange:#e8630a;--green:#1a7a3c;--light-blue:#e8f0fb;--border:#e0e4ea;--bg:#f0f2f5}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:#222}
+  .header{background:var(--blue);color:white;padding:20px 24px 16px}
+  .header-top{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+  .unit-badge{background:var(--orange);color:white;font-family:'Lato',sans-serif;font-weight:900;font-size:13px;padding:3px 10px;border-radius:20px}
+  .header h1{font-size:17px;font-weight:900}
+  .header-sub{font-size:13px;opacity:.75;margin-top:2px}
+  .header-bar{height:4px;background:var(--orange)}
+  .steps-nav{background:white;border-bottom:1px solid var(--border);display:flex;overflow-x:auto}
+  .step-btn{flex:1;min-width:80px;padding:12px 8px;border:none;background:none;font-family:'Noto Sans JP',sans-serif;font-size:12px;font-weight:700;color:#888;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+  .step-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+  .step-btn:hover{background:var(--light-blue)}
+  .step-content{display:none;max-width:720px;margin:0 auto;padding:24px 20px 60px}
+  .step-content.active{display:block}
+  .listen-card{background:white;border-radius:12px;border:1px solid var(--border);padding:28px 24px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .listen-icon{font-size:48px;margin-bottom:12px}
+  .listen-title{font-size:18px;font-weight:900;margin-bottom:6px}
+  .listen-sub{font-size:13px;color:#888;margin-bottom:20px}
+  audio{width:100%;margin-top:8px}
+  .para-card{background:white;border-radius:12px;border:1px solid var(--border);padding:24px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .para-num{display:inline-block;background:var(--blue);color:white;font-family:'Lato',sans-serif;font-weight:900;font-size:12px;padding:2px 10px;border-radius:20px;margin-bottom:12px}
+  .para-en{font-family:'Lato',sans-serif;font-size:15px;line-height:1.9;margin-bottom:16px;color:#111}
+  .para-en em{font-style:normal;background:#fff3cd;padding:0 2px;border-radius:3px}
+  .para-ja{font-size:13px;line-height:1.9;color:#555;border-top:1px solid var(--border);padding-top:14px}
+  .box{border-radius:8px;padding:14px 16px;margin-top:14px;font-size:13px;line-height:1.8}
+  .vocab-box{background:#f0f7ff;border-left:4px solid var(--blue)}
+  .idiom-box{background:#fff5ee;border-left:4px solid var(--orange)}
+  .grammar-box{background:#f0fff4;border-left:4px solid var(--green)}
+  .box-title{font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;opacity:.7}
+  .check-q{background:#fafafa;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-top:14px;font-size:13px}
+  .check-q-label{font-weight:700;color:var(--blue);font-size:12px;margin-bottom:6px}
+  .quiz-card{background:white;border-radius:12px;border:1px solid var(--border);padding:22px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .quiz-q{font-size:15px;font-weight:700;margin-bottom:16px;line-height:1.6}
+  .quiz-opts{display:flex;flex-direction:column;gap:10px}
+  .quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:8px;cursor:pointer;font-size:14px;transition:all .15s;text-align:left;background:white;font-family:'Noto Sans JP',sans-serif}
+  .quiz-opt:hover{border-color:var(--blue);background:var(--light-blue)}
+  .quiz-opt.correct{border-color:var(--green);background:#f0fff4;color:var(--green)}
+  .quiz-opt.wrong{border-color:#e53e3e;background:#fff5f5;color:#c53030}
+  .quiz-fb{margin-top:12px;font-size:13px;padding:10px 14px;border-radius:8px;display:none;line-height:1.7}
+  .quiz-fb.show{display:block}
+  .quiz-fb.ok{background:#f0fff4;color:var(--green)}
+  .quiz-fb.ng{background:#fff5f5;color:#c53030}
+  .quiz-score{text-align:center;padding:24px;background:white;border-radius:12px;border:1px solid var(--border);margin-top:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .score-num{font-size:48px;font-weight:900;color:var(--blue);font-family:'Lato',sans-serif}
+  .retry-btn{margin-top:16px;padding:12px 32px;background:var(--blue);color:white;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif}
+  .fc-wrap{max-width:400px;margin:0 auto}
+  .fc-card{background:white;border-radius:16px;border:1px solid var(--border);min-height:200px;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px 24px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.08);transition:transform .1s;user-select:none;margin-bottom:16px}
+  .fc-card:active{transform:scale(.97)}
+  .fc-front{font-family:'Lato',sans-serif;font-size:22px;font-weight:700;color:var(--blue)}
+  .fc-back{display:none}
+  .fc-back-en{font-family:'Lato',sans-serif;font-size:18px;font-weight:700;color:var(--blue);margin-bottom:8px}
+  .fc-back-ja{font-size:15px;color:#555;margin-bottom:12px}
+  .fc-back-ex{font-size:13px;color:#777;font-style:italic;line-height:1.7}
+  .fc-hint{font-size:12px;color:#aaa;margin-bottom:16px;text-align:center}
+  .fc-btns{display:flex;gap:12px;justify-content:center;margin-bottom:24px}
+  .fc-btn{padding:10px 24px;border:2px solid var(--border);border-radius:8px;cursor:pointer;font-size:14px;font-weight:700;font-family:'Noto Sans JP',sans-serif;background:white;transition:all .15px}
+  .fc-btn.know{border-color:var(--green);color:var(--green)}
+  .fc-btn.know:hover{background:var(--green);color:white}
+  .fc-btn.review{border-color:var(--orange);color:var(--orange)}
+  .fc-btn.review:hover{background:var(--orange);color:white}
+  .fc-progress{font-size:13px;color:#888;text-align:center;margin-bottom:16px}
+  .fc-done{text-align:center;padding:32px 24px;background:white;border-radius:12px;border:1px solid var(--border)}
+  .step-header{font-size:16px;font-weight:900;color:var(--blue);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--light-blue)}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <span class="unit-badge">Unit 65</span>
+    <h1>Pros and Cons of Online Learning</h1>
+  </div>
+  <div class="header-sub">オンライン学習の長所と短所</div>
+</div>
+<div class="header-bar"></div>
+
+<nav class="steps-nav">
+  <button class="step-btn active" onclick="showStep(1,this)">🎧 Step 1<br>Listen</button>
+  <button class="step-btn" onclick="showStep(2,this)">📖 Step 2<br>Read</button>
+  <button class="step-btn" onclick="showStep(3,this)">✏️ Step 3<br>Quiz</button>
+  <button class="step-btn" onclick="showStep(4,this)">🃏 Step 4<br>Flashcards</button>
+</nav>
+
+<!-- STEP 1 -->
+<div class="step-content active" id="step1">
+  <div class="listen-card">
+    <div class="listen-icon">🎧</div>
+    <div class="listen-title">まず音声を聴こう</div>
+    <div class="listen-sub">英文を見る前に、音声だけで内容を掴んでみよう</div>
+    <audio controls src="sokujukure193_eibun65.mp3"></audio>
+  </div>
+</div>
+
+<!-- STEP 2 -->
+<div class="step-content" id="step2">
+  <div class="step-header">📖 英文を読んで理解しよう</div>
+
+  <!-- Para 1 -->
+  <div class="para-card">
+    <span class="para-num">¶ 1</span>
+    <div class="para-en">More and more students are taking lessons online. From dance to high-level university classes, learning is taking place on the Internet. Some students take online lessons in addition to classes taken in person, while others <em>substitute</em> online classes for face-to-face lessons. But is online learning as good as learning in the classroom?</div>
+    <div class="para-ja">ますます多くの生徒がオンラインで授業を受けている。ダンスから高レベルの大学の授業まで、学習がインターネット上で行われている。対面授業に加えてオンライン授業を受ける生徒がいる一方で、対面授業の代わりにオンライン授業を受ける生徒もいる。しかし、オンライン学習は教室での学習と同じくらい良いのだろうか？</div>
+    <div class="vocab-box box">
+      <div class="box-title">📚 Vocabulary</div>
+      <strong>take place</strong>「行われる・起こる」／ <strong>in addition to</strong>「〜に加えて」／ <strong>taken in person</strong>「対面で受ける」（classes修飾）／ <strong>substitute A for B</strong>「Bの代わりにAを使う」／ <strong>face-to-face</strong>「対面の」／ <strong>as good as</strong>「〜と同じくらい良い」
+    </div>
+    <div class="idiom-box box">
+      <div class="box-title">💡 Idiom</div>
+      <strong>substitute A for B</strong>：「BをAに替える・BのかわりにAを使う」<br>
+      例：<em>Can I substitute olive oil for regular oil?</em>（普通の油の代わりにオリーブオイルを使えますか？）<br><br>
+      <strong>as good as ~</strong>：「〜と同じくらい良い・ほぼ〜も同然」<br>
+      例：<em>Once repaired, it'll be as good as new.</em>（修理すれば新品同然になる。）
+    </div>
+    <div class="check-q">
+      <div class="check-q-label">❓ Check</div>
+      What is the main question this passage will address?<br>
+      <strong>→ Is online learning as good as classroom learning?</strong>
+    </div>
+  </div>
+
+  <!-- Para 2 -->
+  <div class="para-card">
+    <span class="para-num">¶ 2</span>
+    <div class="para-en">There are challenges with online lessons. Delays can set on a student's nerves during a class, and connection problems can sometimes stop a lesson for various reasons. Differences in the quality of computer equipment such as cameras and microphones can make it difficult for people to make themselves understood when speaking. What is more, sometimes students have trouble communicating through a computer screen.</div>
+    <div class="para-ja">オンライン授業には課題がある。授業中に遅延が生じると生徒のいらいらを引き起こし、接続の問題でさまざまな理由から授業が止まることもある。カメラやマイクなどのコンピュータ機器の品質の違いにより、話す際に自分の意思を伝えることが難しくなることがある。さらに、コンピュータ画面越しにコミュニケーションをとることに苦労することもある。</div>
+    <div class="vocab-box box">
+      <div class="box-title">📚 Vocabulary</div>
+      <strong>delay</strong>「遅延」／ <strong>set on one's nerves</strong>「〜の神経に触る・いらいらさせる」／ <strong>connection problems</strong>「接続の問題」／ <strong>quality</strong>「品質」／ <strong>equipment</strong>「機器・設備」／ <strong>make oneself understood</strong>「自分の意思を伝える」／ <strong>what is more</strong>「さらに・その上」／ <strong>have trouble -ing</strong>「〜するのに苦労する」
+    </div>
+    <div class="idiom-box box">
+      <div class="box-title">💡 Idiom</div>
+      <strong>make oneself understood</strong>：「自分の言いたいことを相手に伝える」<br>
+      例：<em>I couldn't make myself understood in English.</em>（英語で自分の意思を伝えられなかった。）<br><br>
+      <strong>what is more</strong>：「さらに・その上」（追加情報を加える接続表現）<br>
+      例：<em>It was expensive; what is more, it didn't work.</em>（それは高かった。その上、動かなかった。）
+    </div>
+    <div class="check-q">
+      <div class="check-q-label">❓ Check</div>
+      What are two challenges of online learning mentioned in paragraph 2?<br>
+      <strong>→ Technical issues (delays and connection problems) and difficulty communicating through a screen.</strong>
+    </div>
+  </div>
+
+  <!-- Para 3 -->
+  <div class="para-card">
+    <span class="para-num">¶ 3</span>
+    <div class="para-en">However, online learning also has advantages. Students can turn in their homework via e-mail or text and teachers can help them with problems online. And teachers whose skills are in demand can take on more students without having to leave their homes or teach in larger classrooms.</div>
+    <div class="para-ja">しかし、オンライン学習には利点もある。生徒はメールやテキストで宿題を提出でき、教師はオンラインで問題に対応できる。また、需要のあるスキルを持つ教師は、自宅を離れたり大きな教室で教えたりすることなく、より多くの生徒を受け持つことができる。</div>
+    <div class="vocab-box box">
+      <div class="box-title">📚 Vocabulary</div>
+      <strong>turn in</strong>「提出する」／ <strong>via</strong>「〜を通じて・〜経由で」／ <strong>help ~ with</strong>「〜の…を手伝う」／ <strong>in demand</strong>「需要がある・人気がある」／ <strong>take on</strong>「（仕事・人を）引き受ける」／ <strong>without having to do</strong>「〜せずに済む」
+    </div>
+    <div class="idiom-box box">
+      <div class="box-title">💡 Idiom</div>
+      <strong>in demand</strong>：「需要がある・引く手あまたの」<br>
+      例：<em>Skilled workers are increasingly in demand in the industry.</em>（熟練した労働者はその業界でますます需要が増している。）<br><br>
+      <strong>take on ~</strong>：「〜を引き受ける・〜を担当する」<br>
+      例：<em>I'll take on the work if they will not do it.</em>（彼らがしないなら、私がその仕事を引き受けよう。）
+    </div>
+    <div class="check-q">
+      <div class="check-q-label">❓ Check</div>
+      What advantage does online learning offer to teachers who are "in demand"?<br>
+      <strong>→ They can take on more students without having to leave home or teach in larger classrooms.</strong>
+    </div>
+  </div>
+
+  <!-- Para 4 -->
+  <div class="para-card">
+    <span class="para-num">¶ 4</span>
+    <div class="para-en">Judging from the fast adoption of online learning during the COVID-19 pandemic, it seems likely that online learning will take the place of classroom lessons in many settings. In any case, those who have hesitated should make the most of the trend and even give online lessons a try.</div>
+    <div class="para-ja">新型コロナウイルス（COVID-19）のパンデミック中にオンライン学習が急速に普及したことを考えると、多くの場面でオンライン学習が教室での授業に取って代わりそうだ。いずれにせよ、ためらっていた人たちはこの流れを最大限に活用し、オンライン授業を試してみるべきだ。</div>
+    <div class="vocab-box box">
+      <div class="box-title">📚 Vocabulary</div>
+      <strong>adoption</strong>「採用・普及」／ <strong>pandemic</strong>「パンデミック・世界的流行」／ <strong>take the place of</strong>「〜に取って代わる」／ <strong>setting</strong>「場面・環境」／ <strong>hesitate</strong>「ためらう」／ <strong>trend</strong>「流れ・傾向」
+    </div>
+    <div class="idiom-box box">
+      <div class="box-title">💡 Idiom</div>
+      <strong>judging from ~</strong>：「〜から判断すると」（文全体を修飾する分詞構文）<br>
+      例：<em>Judging from his expression, everything seems fine.</em>（彼の表情から判断すると、すべて大丈夫そうだ。）<br><br>
+      <strong>in any case</strong>：「いずれにせよ・とにかく」（＝ at any rate, in any event）<br>
+      例：<em>In any case, you must not open this door.</em>（いずれにせよ、このドアを開けてはいけない。）<br><br>
+      <strong>make the most of ~</strong>：「〜を最大限に活用する」<br>
+      例：<em>I'll make the most of this great opportunity.</em>（この素晴らしい機会を最大限に活かそう。）<br><br>
+      <strong>in place of ~</strong>：「〜の代わりに」<br>
+      例：<em>Can someone attend in place of Ken?</em>（誰かケンの代わりに参加できますか？）
+    </div>
+    <div class="grammar-box box">
+      <div class="box-title">📝 Grammar</div>
+      <strong>it seems likely that ...</strong>：「…らしい・…と思われる」<br>
+      <em>likely</em>の代わりに <em>unlikely, reasonable, clear, obvious</em> などが入ることも多い。<br>
+      例：<em>It seems likely that prices will rise.</em>（物価は上がりそうだ。）
+    </div>
+    <div class="check-q">
+      <div class="check-q-label">❓ Check</div>
+      What does the author suggest that hesitant people should do?<br>
+      <strong>→ Make the most of the online learning trend and give online lessons a try.</strong>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="step-content" id="step3">
+  <div class="step-header">✏️ 理解度チェッククイズ</div>
+
+  <div class="quiz-card" id="qc1">
+    <div class="quiz-q">1. The word "substitute" in paragraph 1 means ____.</div>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answer(this,'wrong',1)">① add to</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',1)">② improve</button>
+      <button class="quiz-opt" onclick="answer(this,'correct',1)">③ use instead of</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',1)">④ compare with</button>
+    </div>
+    <div class="quiz-fb" id="qf1"></div>
+  </div>
+
+  <div class="quiz-card" id="qc2">
+    <div class="quiz-q">2. According to paragraph 2, what is one problem caused by differences in computer equipment?</div>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answer(this,'wrong',2)">① Students cannot access the Internet.</button>
+      <button class="quiz-opt" onclick="answer(this,'correct',2)">② It can be difficult for people to make themselves understood when speaking.</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',2)">③ Teachers cannot grade homework online.</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',2)">④ Students have to buy new computers every year.</button>
+    </div>
+    <div class="quiz-fb" id="qf2"></div>
+  </div>
+
+  <div class="quiz-card" id="qc3">
+    <div class="quiz-q">3. What advantage do online lessons offer to teachers who are "in demand"?</div>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answer(this,'wrong',3)">① They can earn more money per student.</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',3)">② They can travel to different countries to teach.</button>
+      <button class="quiz-opt" onclick="answer(this,'correct',3)">③ They can take on more students without leaving home or needing larger classrooms.</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',3)">④ They can teach university-level courses for free.</button>
+    </div>
+    <div class="quiz-fb" id="qf3"></div>
+  </div>
+
+  <div class="quiz-card" id="qc4">
+    <div class="quiz-q">4. The phrase "in any case" in paragraph 4 means ____.</div>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answer(this,'wrong',4)">① only if</button>
+      <button class="quiz-opt" onclick="answer(this,'correct',4)">② whatever the situation / anyway</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',4)">③ in this specific situation</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',4)">④ if possible</button>
+    </div>
+    <div class="quiz-fb" id="qf4"></div>
+  </div>
+
+  <div class="quiz-card" id="qc5">
+    <div class="quiz-q">5. What does the author predict will happen based on online learning adoption during COVID-19?</div>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answer(this,'wrong',5)">① Online learning will be banned due to quality concerns.</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',5)">② Classroom learning will become more popular than before.</button>
+      <button class="quiz-opt" onclick="answer(this,'correct',5)">③ Online learning will replace classroom lessons in many settings.</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',5)">④ Students will prefer face-to-face lessons to online ones.</button>
+    </div>
+    <div class="quiz-fb" id="qf5"></div>
+  </div>
+
+  <div class="quiz-score" id="quiz-score" style="display:none">
+    <div>あなたのスコア</div>
+    <div class="score-num"><span id="score-val">0</span> / 5</div>
+    <div style="margin-top:8px;color:#555;font-size:14px" id="score-msg"></div>
+    <button class="retry-btn" onclick="retryQuiz()">もう一度挑戦</button>
+  </div>
+</div>
+
+<!-- STEP 4 -->
+<div class="step-content" id="step4">
+  <div class="step-header">🃏 イディオム・フラッシュカード</div>
+  <div class="fc-wrap">
+    <div class="fc-progress" id="fc-prog"></div>
+    <div class="fc-card" id="fc-card" onclick="flipCard()">
+      <div class="fc-front" id="fc-front"></div>
+      <div class="fc-back" id="fc-back" style="display:none">
+        <div class="fc-back-en" id="fc-en"></div>
+        <div class="fc-back-ja" id="fc-ja"></div>
+        <div class="fc-back-ex" id="fc-ex"></div>
+      </div>
+    </div>
+    <div class="fc-hint" id="fc-hint">カードをタップして意味を確認</div>
+    <div class="fc-btns" id="fc-btns" style="display:none">
+      <button class="fc-btn know" onclick="markCard(true)">✓ わかった</button>
+      <button class="fc-btn review" onclick="markCard(false)">↩ もう一度</button>
+    </div>
+    <div class="fc-done" id="fc-done" style="display:none">
+      <div style="font-size:32px;margin-bottom:12px">🎉</div>
+      <div style="font-weight:700;font-size:16px;margin-bottom:8px">お疲れ様でした！</div>
+      <div style="font-size:13px;color:#555;margin-bottom:16px">全カード完了</div>
+      <button class="retry-btn" onclick="shuffleCards()">もう一度</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function showStep(n, btn) {
+  document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.step-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+  btn.classList.add('active');
+}
+
+let scores = {};
+let answered = {};
+function answer(btn, type, qn) {
+  if (answered[qn]) return;
+  answered[qn] = true;
+  const fb = document.getElementById('qf' + qn);
+  btn.classList.add(type === 'correct' ? 'correct' : 'wrong');
+  if (type === 'correct') {
+    scores[qn] = 1;
+    fb.textContent = '✓ 正解！';
+    fb.className = 'quiz-fb show ok';
+  } else {
+    scores[qn] = 0;
+    fb.className = 'quiz-fb show ng';
+    const correctTexts = {
+      1: '③ use instead of',
+      2: '② It can be difficult for people to make themselves understood when speaking.',
+      3: '③ They can take on more students without leaving home or needing larger classrooms.',
+      4: '② whatever the situation / anyway',
+      5: '③ Online learning will replace classroom lessons in many settings.'
+    };
+    fb.textContent = '✗ 不正解。正解は「' + correctTexts[qn] + '」';
+  }
+  document.querySelectorAll('#qc' + qn + ' .quiz-opt').forEach(o => o.disabled = true);
+  if (Object.keys(answered).length === 5) showScore();
+}
+function showScore() {
+  const total = Object.values(scores).reduce((a, b) => a + b, 0);
+  document.getElementById('score-val').textContent = total;
+  const msgs = ['もう一度読んでみよう💪', '惜しい！復習しよう📖', 'よく頑張りました！🌟', '素晴らしい！⭐', '満点！完璧です！🏆'];
+  document.getElementById('score-msg').textContent = msgs[total] || msgs[4];
+  document.getElementById('quiz-score').style.display = 'block';
+}
+function retryQuiz() {
+  scores = {}; answered = {};
+  document.getElementById('quiz-score').style.display = 'none';
+  document.querySelectorAll('.quiz-opt').forEach(o => {
+    o.classList.remove('correct', 'wrong');
+    o.disabled = false;
+  });
+  document.querySelectorAll('.quiz-fb').forEach(f => f.className = 'quiz-fb');
+}
+
+const cards = [
+  { front: 'substitute A for B', en: 'substitute A for B', ja: 'BをAに替える・BのかわりにAを使う', ex: 'Can I substitute olive oil for regular oil?\n（普通の油の代わりにオリーブオイルを使えますか？）' },
+  { front: 'as good as ~', en: 'as good as ~', ja: '〜と同じくらい良い・ほぼ〜も同然', ex: 'Once repaired, it\'ll be as good as new.\n（修理すれば新品同然になる。）' },
+  { front: 'make oneself understood', en: 'make oneself understood', ja: '自分の意思・言いたいことを伝える', ex: 'I couldn\'t make myself understood in English.\n（英語で自分の意思を伝えられなかった。）' },
+  { front: 'what is more', en: 'what is more', ja: 'さらに・その上（追加情報）', ex: 'It was expensive; what is more, it didn\'t work.\n（それは高かった。その上、動かなかった。）' },
+  { front: 'help ~ with ...', en: 'help ~ with ...', ja: '〜の…を手伝う', ex: 'This syrup will help you with your sore throat.\n（このシロップは喉の痛みに効くでしょう。）' },
+  { front: 'in demand', en: 'in demand', ja: '需要がある・引く手あまたの', ex: 'Skilled workers are increasingly in demand.\n（熟練した労働者はますます需要が増している。）' },
+  { front: 'take on ~', en: 'take on ~', ja: '〜を引き受ける・担当する', ex: 'I\'ll take on the work if they will not do it.\n（彼らがしないなら、私がその仕事を引き受けよう。）' },
+  { front: 'judging from ~', en: 'judging from ~', ja: '〜から判断すると', ex: 'Judging from his expression, he seems happy.\n（彼の表情から判断すると、嬉しそうだ。）' },
+  { front: 'in any case', en: 'in any case', ja: 'いずれにせよ・とにかく', ex: 'In any case, you must not open this door.\n（いずれにせよ、このドアを開けてはいけない。）' },
+  { front: 'make the most of ~', en: 'make the most of ~', ja: '〜を最大限に活用する', ex: 'I\'ll make the most of this great opportunity.\n（この素晴らしい機会を最大限に活かそう。）' },
+  { front: 'in place of ~', en: 'in place of ~', ja: '〜の代わりに', ex: 'Can someone attend in place of Ken?\n（誰かケンの代わりに参加できますか？）' },
+  { front: 'take advantage of ~', en: 'take advantage of ~', ja: '〜を利用する・〜につけ込む', ex: 'He took advantage of his popularity to become a leader.\n（彼は自分の人気を利用してリーダーになった。）' },
+];
+
+let deck = [], current = 0, flipped = false;
+function shuffleCards() {
+  deck = [...cards].sort(() => Math.random() - 0.5);
+  current = 0; flipped = false;
+  document.getElementById('fc-done').style.display = 'none';
+  document.getElementById('fc-card').style.display = 'flex';
+  document.getElementById('fc-hint').style.display = 'block';
+  renderCard();
+}
+function renderCard() {
+  if (current >= deck.length) {
+    document.getElementById('fc-card').style.display = 'none';
+    document.getElementById('fc-btns').style.display = 'none';
+    document.getElementById('fc-hint').style.display = 'none';
+    document.getElementById('fc-done').style.display = 'block';
+    document.getElementById('fc-prog').textContent = '';
+    return;
+  }
+  const c = deck[current];
+  document.getElementById('fc-front').textContent = c.front;
+  document.getElementById('fc-front').style.display = 'block';
+  document.getElementById('fc-back').style.display = 'none';
+  document.getElementById('fc-en').textContent = c.en;
+  document.getElementById('fc-ja').textContent = c.ja;
+  document.getElementById('fc-ex').textContent = c.ex;
+  document.getElementById('fc-btns').style.display = 'none';
+  document.getElementById('fc-hint').style.display = 'block';
+  document.getElementById('fc-prog').textContent = (current + 1) + ' / ' + deck.length;
+  flipped = false;
+}
+function flipCard() {
+  if (flipped) return;
+  flipped = true;
+  document.getElementById('fc-front').style.display = 'none';
+  document.getElementById('fc-back').style.display = 'block';
+  document.getElementById('fc-btns').style.display = 'flex';
+  document.getElementById('fc-hint').style.display = 'none';
+}
+function markCard(known) {
+  if (!known) deck.push(deck[current]);
+  current++;
+  renderCard();
+}
+shuffleCards();
+</script>
+</body>
+</html>
